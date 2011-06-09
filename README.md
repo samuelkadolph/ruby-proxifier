@@ -47,41 +47,27 @@ socket.gets # => "HTTP/1.1 200 OK\r\n"
   </tr>
   <tr>
     <td>HTTP</td>
-    <td><pre>
-http://[username[:password]@]host[:port][?tunnel=false]
-    </pre></td>
+    <td><pre>http://[username[:password]@]host[:port][?tunnel=false]</pre></td>
     <td>
       The port defaults to 80. This is currently a limitation that may be solved in the future.<br>
       Appending <code>?tunnel=false</code> forces the proxy to not use <code>CONNECT</code>.</td>
   </tr>
   <tr>
     <td>SOCKS5</td>
-    <td>
-```
-socks://[username[:password]@]host[:port]
-socks5://[username[:password]@]host[:port]
-```
-    </td>
+    <td><pre>socks://[username[:password]@]host[:port]
+socks5://[username[:password]@]host[:port]</pre></td>
     <td>
       Port defaults to 1080.
     </td>
   </tr>
   <tr>
     <td>SOCKS4</td>
-    <td>
-```
-socks4://[username@]ip1.ip2.ip3.ip4[:port]
-```
-   </td>
+    <td><pre>socks4://[username@]ip1.ip2.ip3.ip4[:port]</pre></td>
     <td>Currently hangs. Not sure if the problem is with code or server.</td>
   </tr>
   <tr>
     <td>SOCKS4A</td>
-    <td>
-```
-socks4a://[username@]host[:port]
-```
-   </td>
+    <td><pre>socks4a://[username@]host[:port]</pre></td>
     <td>Not yet implemented.</td>
   </tr>
 </table>
