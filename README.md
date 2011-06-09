@@ -47,11 +47,9 @@ socket.gets # => "HTTP/1.1 200 OK\r\n"
   </tr>
   <tr>
     <td>HTTP</td>
-    <td>
-```
+    <td><pre>
 http://[username[:password]@]host[:port][?tunnel=false]
-```
-    </td>
+    </pre></td>
     <td>
       The port defaults to 80. This is currently a limitation that may be solved in the future.<br>
       Appending <code>?tunnel=false</code> forces the proxy to not use <code>CONNECT</code>.</td>
