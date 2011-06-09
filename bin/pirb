@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+executable = File.expand_path("../" + Gem.default_exec_format % "irb", Gem.ruby)
+load_paths = Gem.loaded_specs["sockets"].load_paths.map { |p| "-I#{p}" }
+# TODO: support argument switches
+
+exec(executable, *load_paths, "-rsockets/env", *ARGV)
