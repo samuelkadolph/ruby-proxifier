@@ -21,7 +21,8 @@ This gem was created for 2 purposes.
 
 First is to enable ruby programmers to use HTTP or SOCKS proxies interchangeably when using TCPSockets. Either manually with `Sockets::Proxy#open` or by `require "sockets/env"`.
 
-The second purpose is use ruby code that doesn't consider a proxy for users that have to use proxies. The pruby and pirb executables are simple wrappers for their respective ruby executables that support proxies from environment variables.
+The second purpose is to use ruby code that doesn't consider a proxy for users that have to use proxies.<br>
+The pruby and pirb executables are simple wrappers for their respective ruby executables that support proxies from environment variables.
 
 ## Usage
 
