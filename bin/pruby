@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
 executable = Gem.ruby
-load_paths = Gem.loaded_specs["sockets"].load_paths.map { |p| "-I#{p}" }
+full_gem_path = Gem.loaded_specs["sockets"].full_gem_path
+load_paths = Gem.loaded_specs["sockets"].require_paths.map { |p| "-I#{File.join(full_gem_path, p)}" }
 # TODO: support argument switches
 
 exec(executable, *load_paths, "-rsockets/env", *ARGV)
