@@ -1,46 +1,84 @@
-# ruby-sockets
+# ruby-proxifier
 
 ## Installing
 
 ### Recommended
 
 ```
-gem install sockets
+gem install proxifier
 ```
 
 ### Edge
 
 ```
-git clone https://github.com/samuelkadolph/ruby-sockets
-cd ruby-sockets && rake install
+git clone https://github.com/samuelkadolph/ruby-proxifier
+cd ruby-proxifier && rake install
 ```
 
 ## Rationale
 
 This gem was created for 2 purposes.
 
-First is to enable ruby programmers to use HTTP or SOCKS proxies interchangeably when using TCPSockets. Either manually with `Sockets::Proxy#open` or by `require "sockets/env"`.
+First is to enable ruby programmers to use HTTP or SOCKS proxies
+interchangeably when using TCPSockets. Either manually with
+`Proxifier::Proxy#open` or by `require "proxifier/env"`.
 
-The second purpose is to use ruby code that doesn't consider a proxy for users that have to use proxies.<br>
-The pruby and pirb executables are simple wrappers for their respective ruby executables that support proxies from environment variables.
+The second purpose is to use ruby code that doesn't user proxies for users that
+have to use proxies.<br>The pruby and pirb executables are simple wrappers for
+their respective ruby executables that support proxies from environment
+variables.
 
 ## Usage
 
-### Environment Variables & Executable Wrappers
+### Executable Wrappers & Environment Variables
 
-sockets provides two executables: `pruby` and `pirb`. They are simple wrappers
-for your current `ruby` and `irb` executables that `require "sockets/env"`
-which installs hooks to `TCPSocket` which will use your proxy environment
-variables whenever a `TCPSocket` is created. sockets will use the
-`proxy`, `PROXY`, `socks_proxy` and `http_proxy` environment variables (in that
-order) to determine what proxy to use.
+proxifier provides two executables: `pruby` and `pirb`. They are simple
+wrappers for your current `ruby` and `irb` executables that requires the
+`"proxifier/env"` script which installs hooks into `TCPSocket` which will use
+the proxy environment variables to proxy any `TCPSocket`.
+
+The environment variables that proxifier will check are (in order of descending
+precedence):
+
+<table>
+  <tr>
+    <th>Variable Name</th>
+    <th>Alternatives</th>
+    <th>Notes</th>
+  </tr>
+  <tr>
+    <td>proxy</td>
+    <td>PROXY</td>
+    <td>Requires the proxy scheme to be present.</td>
+  </tr>
+  <tr>
+    <td>socks_proxy</td>
+    <td>SOCKS_PROXY<br>socks5_proxy<br>SOCKS5_PROXY</td>
+    <td>Implies the SOCKS5 proxy scheme.</td>
+  </tr>
+  <tr>
+    <td>socks4a_proxy</td>
+    <td>SOCKS4A_PROXY</td>
+    <td>Implies the SOCKS4A proxy scheme.</td>
+  </tr>
+  <tr>
+    <td>socks4_proxy</td>
+    <td>PROXY</td>
+    <td>Implies the SOCKS4 proxy scheme.</td>
+  </tr>
+  <tr>
+    <td>http_proxy</td>
+    <td>HTTP_PROXY</td>
+    <td>Implies the HTTP proxy scheme.</td>
+  </tr>
+</table>
 
 ### Ruby
 
 ```ruby
-require "sockets/proxy"
+require "proxifier/proxy"
 
-proxy = Sockets::Proxy("socks://localhost")
+proxy = Proxifier::Proxy("socks://localhost")
 socket = proxy.open("www.google.com", 80)
 socket << "GET / HTTP/1.1\r\nHost: www.google.com\r\n\r\n"
 socket.gets # => "HTTP/1.1 200 OK\r\n"
@@ -70,13 +108,13 @@ socks5://[username[:password]@]host[:port]</pre></td>
     </td>
   </tr>
   <tr>
-    <td>SOCKS4</td>
-    <td><pre>socks4://[username@]ip1.ip2.ip3.ip4[:port]</pre></td>
-    <td>Currently hangs. Not sure if the problem is with code or server.</td>
-  </tr>
-  <tr>
     <td>SOCKS4A</td>
     <td><pre>socks4a://[username@]host[:port]</pre></td>
     <td>Not yet implemented.</td>
+  </tr>
+  <tr>
+    <td>SOCKS4</td>
+    <td><pre>socks4://[username@]host[:port]</pre></td>
+    <td>Currently hangs. Not sure if the problem is with code or server.</td>
   </tr>
 </table>

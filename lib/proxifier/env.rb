@@ -1,6 +1,24 @@
-require "sockets/proxy"
+require "socket"
+require "proxifier"
 
-module Sockets
+module Proxifier
+  class Proxy
+    def open(host, port, local_host = nil, local_port = nil)
+      return TCPSocket.new(host, port, local_host, local_port, :proxy => nil) unless proxify?(host)
+
+      socket = TCPSocket.new(proxy.host, proxy.port, local_host, local_port, :proxy => nil)
+
+      begin
+        proxify(socket, host, port)
+      rescue
+        socket.close
+        raise
+      end
+
+      socket
+    end
+  end
+
   module Proxify
     def self.included(klass)
       klass.class_eval do
@@ -18,11 +36,11 @@ module Sockets
         options = options_if_local_host
       end
 
-      if options[:proxy] && (proxy = Sockets::Proxy(options.delete(:proxy), options)) && proxy.proxify?(host)
+      if options[:proxy] && (proxy = Proxifier::Proxy(options.delete(:proxy), options)) && proxy.proxify?(host)
         initialize_without_proxy(proxy.host, proxy.port, local_host, local_port)
         begin
           proxy.proxify(self, host, port)
-        rescue Exception
+        rescue
           close
           raise
         end
@@ -31,9 +49,7 @@ module Sockets
       end
     end
   end
-end
 
-module Sockets
   module EnvironmentProxify
     def self.included(klass)
       klass.class_eval do
@@ -66,12 +82,30 @@ module Sockets
 
     module ClassMethods
       def environment_proxy
-        ENV["proxy"] || ENV["PROXY"] || ENV["socks_proxy"] || ENV["http_proxy"]
+        ENV["proxy"] || ENV["PROXY"] || specific_environment_proxy
       end
 
       def environment_no_proxy
-        ENV["no_proxy"]
+        ENV["no_proxy"] || ENV["NO_PROXY"]
       end
+
+      private
+        def specific_environment_proxy
+          %w(socks socks5 socks4a socks4 http).each do |type|
+            if proxy = ENV["#{type}_proxy"] || ENV["#{type.upcase}_PROXY"]
+              scheme = "#{type}://"
+
+              proxy = proxy.dup
+              proxy.insert(0, scheme) unless proxy.index(scheme) == 0
+              return proxy
+            end
+          end
+        end
     end
   end
+end
+
+class TCPSocket
+  include Proxifier::Proxify
+  include Proxifier::EnvironmentProxify
 end

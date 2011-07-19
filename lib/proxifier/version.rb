@@ -1,3 +1,3 @@
-module Sockets
+module Proxifier
   VERSION = "1.0.0"
 end
