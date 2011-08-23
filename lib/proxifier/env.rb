@@ -100,6 +100,8 @@ module Proxifier
               return proxy
             end
           end
+
+          nil
         end
     end
   end
