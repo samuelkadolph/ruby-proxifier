@@ -84,6 +84,23 @@ socket << "GET / HTTP/1.1\r\nHost: www.google.com\r\n\r\n"
 socket.gets # => "HTTP/1.1 200 OK\r\n"
 ```
 
+### Environment - patching TCPSocket
+
+```ruby
+require 'proxifier/env'
+ENV['PROXY'] = 'http://10.0.0.44:8888' # How to find the proxy
+ENV['PROXY_FILTER_REGEX'] = '(10\..*|localhost)' # Do not use proxy for connections inside internal net or localhost
+ENV['PROXY_FILTER_LIST'] = '66.211.168.123,207.97.227.239'
+```
+
+Afterwards, any new TCPSocket connections will use the proxy, unless they're excluded either by the specific PROXY_FILTER_LIST or the PROXY_FILTER_REGEX.
+
+PROXY_FILTER_LIST specifies a comma separated list of hostnames or IP addresses (whichever the client code is going to use).
+
+PROXY_FILTER_REGEX is a regular expression, where if the connection hostname (or IP address) matches the regex, connections will be made directly and not through the proxy.
+
+Both PROXY_FILTER_LIST and PROXY_FILTER_REGEX are optional, but only one will be used.
+
 ## Supported Proxies
 
 <table>

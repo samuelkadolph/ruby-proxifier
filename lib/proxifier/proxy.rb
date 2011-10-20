@@ -8,8 +8,12 @@ module Proxifier
       def proxify?(host, no_proxy = nil)
         return true unless no_proxy
 
-        dont_proxy = no_proxy.split(",")
-        dont_proxy.none? { |h| host =~ /#{h}\Z/ }
+        if no_proxy.is_a?(Regexp)
+          (host =~ no_proxy).nil?
+        else
+          dont_proxy = no_proxy.split(",")
+          dont_proxy.none? { |h| host =~ /#{h}\Z/ }
+        end
       end
     end
 

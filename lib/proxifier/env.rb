@@ -36,6 +36,12 @@ module Proxifier
         options = options_if_local_host
       end
 
+      if ENV['PROXY_FILTER_REGEX'].present?
+        options[:no_proxy] = /\A#{ENV['PROXY_FILTER_REGEX']}\z/
+      elsif ENV['PROXY_FILTER_LIST'].present?
+        options[:no_proxy] = ENV['PROXY_FILTER_LIST']
+      end
+
       if options[:proxy] && (proxy = Proxifier::Proxy(options.delete(:proxy), options)) && proxy.proxify?(host)
         initialize_without_proxy(proxy.host, proxy.port, local_host, local_port)
         begin
