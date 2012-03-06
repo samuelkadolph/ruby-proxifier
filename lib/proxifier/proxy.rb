@@ -23,7 +23,7 @@ module Proxifier
     def open(host, port, local_host = nil, local_port = nil)
       return TCPSocket.new(host, port, local_host, local_port) unless proxify?(host)
 
-      socket = TCPSocket.new(proxy.host, proxy.port, local_host, local_port)
+      socket = TCPSocket.new(self.host, self.port, local_host, local_port)
 
       begin
         proxify(socket, host, port)
