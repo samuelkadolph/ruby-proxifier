@@ -3,7 +3,8 @@ require "proxifier/proxy"
 
 module Proxifier
   class SOCKSProxy < Proxy
-    VERSION = 0x05
+    VERSION                = 0x05
+    SUBNEGOTIATION_VERSION = 0x01
 
     def do_proxify(socket, host, port)
       authenticaton_method = greet(socket)
@@ -26,12 +27,12 @@ module Proxifier
         case method
         when 0x00 # NO AUTHENTICATION REQUIRED
         when 0x02 # USERNAME/PASSWORD
-          user &&= user[0, 0xFF]
-          password &&= password[0, 0xFF]
+          _user     = user ? user[0, 0xFF] : ''
+          _password = password ? password[0, 0xFF] : ''
 
-          socket << [user.size, user, password.size, password].pack("CA#{user.size}CA#{password.size}")
-          version, status = socket.read(2).unpack("CC")
-          check_version(version)
+          socket << [SUBNEGOTIATION_VERSION, _user.size, _user, _password.size, _password].pack("CCA#{_user.size}CA#{_password.size}")
+          version, status = socket.read(2).unpack('CC')
+          check_version(version, SUBNEGOTIATION_VERSION)
 
           case status
             when 0x00 # SUCCESS
