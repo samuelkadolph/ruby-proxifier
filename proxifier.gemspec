@@ -13,4 +13,6 @@ Gem::Specification.new do |s|
 
   s.files       = Dir["bin/*", "lib/**/*"] + ["LICENSE", "README.md"]
   s.executables = ["pirb", "pruby"]
+
+  s.add_development_dependency 'minitest', '>= 4.6.0'
 end
