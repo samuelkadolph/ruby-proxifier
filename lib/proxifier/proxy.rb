@@ -20,10 +20,11 @@ module Proxifier
       @url, @options = url, options
     end
 
-    def open(host, port, local_host = nil, local_port = nil)
-      return TCPSocket.new(host, port, local_host, local_port) unless proxify?(host)
+    def open(host, port, local_host = nil, local_port = nil, socket_klass = nil)
+      socket_klass ||= TCPSocket
+      return socket_klass.new(host, port, local_host, local_port) unless proxify?(host)
 
-      socket = TCPSocket.new(self.host, self.port, local_host, local_port)
+      socket = socket_klass.new(self.host, self.port, local_host, local_port)
 
       begin
         proxify(socket, host, port)
