@@ -51,7 +51,7 @@ module Proxifier
       @query_options ||= query ? Hash[query.split("&").map { |q| q.split("=") }] : {}
     end
 
-    %w(no_proxy).each do |option|
+    %w(no_proxy user_agent).each do |option|
       class_eval "def #{option}; options[:#{option}] end"
     end
 
