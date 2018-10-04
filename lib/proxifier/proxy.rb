@@ -16,7 +16,7 @@ module Proxifier
     attr_reader :url, :options
 
     def initialize(url, options = {})
-      url = URI.parse(uri) unless url.is_a?(URI::Generic)
+      url = URI.parse(url) unless url.is_a?(URI::Generic)
       @url, @options = url, options
     end
 
