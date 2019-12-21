@@ -1,5 +1,5 @@
 require "net/http"
-require "proxifier/proxy"
+require_relative "../proxy"
 
 module Proxifier
   class HTTPProxy < Proxy

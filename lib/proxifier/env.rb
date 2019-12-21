@@ -1,5 +1,5 @@
 require "socket"
-require "proxifier"
+require_relative "../proxifier"
 
 module Proxifier
   class Proxy

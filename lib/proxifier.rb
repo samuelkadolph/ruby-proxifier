@@ -1,8 +1,8 @@
 require "uri"
-require "uri/socks"
+require_relative "uri/socks"
 
 module Proxifier
-  require "proxifier/version"
+  require_relative "proxifier/version"
 
   autoload :HTTPProxy, "proxifier/proxies/http"
   autoload :SOCKSProxy, "proxifier/proxies/socks"

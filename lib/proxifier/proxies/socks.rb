@@ -1,5 +1,5 @@
 require "ipaddr"
-require "proxifier/proxy"
+require_relative "../proxy"
 
 module Proxifier
   class SOCKSProxy < Proxy

@@ -1,4 +1,4 @@
-require "proxifier/proxies/socks"
+require_relative "socks"
 
 module Proxifier
   class SOCKS4Proxy < SOCKSProxy
