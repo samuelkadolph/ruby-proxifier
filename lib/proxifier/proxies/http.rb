@@ -1,5 +1,6 @@
 require "net/http"
 require "proxifier/proxy"
+require 'base64'
 
 module Proxifier
   class HTTPProxy < Proxy
@@ -8,7 +9,7 @@ module Proxifier
 
       socket << "CONNECT #{host}:#{port} HTTP/1.1\r\n"
       socket << "Host: #{host}:#{port}\r\n"
-      socket << "Proxy-Authorization: Basic #{["#{user}:#{password}"].pack("m").chomp}\r\n" if user
+      socket << "Proxy-Authorization: Basic #{Base64.strict_encode64("#{user}:#{password}").chomp}\r\n" if user
       socket << "\r\n"
 
       buffer = Net::BufferedIO.new(socket)
