@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/samuelkadolph/ruby-proxifier"
   s.summary     = %q{Proxifier is a gem to force ruby to use a proxy.}
   s.description = %q{Proxifier adds support for HTTP or SOCKS proxies and lets you force TCPSocket to use proxies.}
+  s.license     = "MIT"
 
   s.files       = Dir["bin/*", "lib/**/*"] + ["LICENSE", "README.md"]
   s.executables = ["pirb", "pruby"]
