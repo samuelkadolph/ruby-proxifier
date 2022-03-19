@@ -1,18 +1,32 @@
-require "uri/generic"
+require 'uri/generic'
 
 module URI
-  class SOCKS < Generic
+  class Socks < Generic
     DEFAULT_PORT = 1080
     COMPONENT = [:scheme, :userinfo, :host, :port, :query].freeze
-  end
-  @@schemes["SOCKS"] = SOCKS
-  @@schemes["SOCKS5"] = SOCKS
 
-  class SOCKS4 < SOCKS
+    def self.build(args)
+      tmp = Util.make_components_hash(self, args)
+      super(tmp)
+    end
   end
-  @@schemes["SOCKS4"] = SOCKS4
 
-  class SOCKS4A < SOCKS
+  class Socks4 < Socks
   end
-  @@schemes["SOCKS4A"] = SOCKS4A
+
+  class Socks4A < Socks
+  end
+
+  mapping = {
+    'SOCKS' => Socks,
+    'SOCKS5' => Socks,
+    'SOCKS4' => Socks4,
+    'SOCKS4A' => Socks4A
+  }
+  if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3.1.0')
+    mapping.each { |scheme, class_name| register_scheme scheme, class_name }
+  else
+    mapping.each { |scheme, class_name| @@schemes[scheme] = class_name }
+  end
 end
+
